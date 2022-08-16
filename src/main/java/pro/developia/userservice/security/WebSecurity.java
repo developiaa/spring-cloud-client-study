@@ -25,10 +25,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 //        http.authorizeRequests().antMatchers("/users/**").permitAll();
 
-        String IP_ADDRESS = "192.168.200.101";
         http.authorizeRequests()
                 .antMatchers("/**")
-                .access("hasIpAddress('" + IP_ADDRESS + "')")
+                .permitAll()
                 .and()
                 // 해당 필터를 통과한 데이터만 처리
                 .addFilter(getAuthenticationFilter())
@@ -37,8 +36,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     }
 
     private AuthenticationFilter getAuthenticationFilter() throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter();
-        authenticationFilter.setAuthenticationManager(authenticationManager());
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), userService, environment);
+//        authenticationFilter.setAuthenticationManager(authenticationManager());
 
         return authenticationFilter;
     }
