@@ -42,6 +42,3 @@ management:
       exposure:
         include: refresh, health, beans, info
 
-token:
-  expiration_time: 86400000
-  secret: user_token_secret
