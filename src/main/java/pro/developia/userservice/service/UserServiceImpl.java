@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pro.developia.userservice.client.OrderServiceClient;
 import pro.developia.userservice.dto.UserDto;
+import pro.developia.userservice.error.FeignErrorDecoder;
 import pro.developia.userservice.jpa.UserEntity;
 import pro.developia.userservice.repository.UserRepository;
 import pro.developia.userservice.vo.ResponseOrder;
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final Environment environment;
 
     private final OrderServiceClient orderServiceClient;
+    private final FeignErrorDecoder feignErrorDecoder;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -69,12 +71,15 @@ public class UserServiceImpl implements UserService {
 //        List<ResponseOrder> orderList = orderListResponse.getBody();
 
         // Feign exception handling
-        List<ResponseOrder> orderList = null;
-        try {
-            orderList = orderServiceClient.getOrders(userId);
-        } catch (FeignException exception) {
-            log.error(exception.getMessage());
-        }
+//        List<ResponseOrder> orderList = null;
+//        try {
+//            orderList = orderServiceClient.getOrders(userId);
+//        } catch (FeignException exception) {
+//            log.error(exception.getMessage());
+//        }
+
+        // Feign exception handling by ErrorDecoder
+        List<ResponseOrder> orderList = orderServiceClient.getOrders(userId);
 
         userDto.setOrders(orderList);
 
