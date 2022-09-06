@@ -1,6 +1,8 @@
 package pro.developia.userservice.service;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.env.Environment;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -64,7 +67,14 @@ public class UserServiceImpl implements UserService {
 //                new ParameterizedTypeReference<List<ResponseOrder>>() {
 //                });
 //        List<ResponseOrder> orderList = orderListResponse.getBody();
-        List<ResponseOrder> orderList = orderServiceClient.getOrders(userId);
+
+        // Feign exception handling
+        List<ResponseOrder> orderList = null;
+        try {
+            orderList = orderServiceClient.getOrders(userId);
+        } catch (FeignException exception) {
+            log.error(exception.getMessage());
+        }
 
         userDto.setOrders(orderList);
 

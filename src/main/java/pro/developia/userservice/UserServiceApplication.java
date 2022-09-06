@@ -1,5 +1,6 @@
 package pro.developia.userservice;
 
+import feign.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -27,6 +28,12 @@ public class UserServiceApplication {
     @LoadBalanced // http://127.0.0.1 > http://게이트웨이 서비스
     public RestTemplate getRestTemplate() {
         return new RestTemplate();
+    }
+
+    // feign client logger config
+    @Bean
+    public Logger.Level feignLoggerLevel() {
+        return Logger.Level.FULL;
     }
 
 }

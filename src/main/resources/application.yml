@@ -38,7 +38,7 @@ greeting:
 
 logging:
   level:
-    pro.developia.userservice: DEBUG
+    pro.developia.userservice.client: DEBUG
 
 # actuator info
 management:
